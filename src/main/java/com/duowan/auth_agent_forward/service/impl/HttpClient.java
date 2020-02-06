@@ -14,10 +14,10 @@ import org.springframework.web.client.RestTemplate;
 public class HttpClient {
     //public String client(String url, HttpMethod method, MultiValueMap<String, String> params){
         //JSONObject
+
     public String client(String url, HttpMethod method, JSONObject jsonObj) {
         RestTemplate client = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        //  请勿轻易改变此提交方式，大部分的情况下，提交方式都是表单提交
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(jsonObj.toString(), headers);
         //HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, headers);

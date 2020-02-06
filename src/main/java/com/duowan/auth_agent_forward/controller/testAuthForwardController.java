@@ -1,6 +1,6 @@
 package com.duowan.auth_agent_forward.controller;
 
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
+import com.alibaba.fastjson.JSONObject;
 import com.duowan.auth_agent_forward.logic.HandlerUtil;
 import com.duowan.auth_agent_forward.service.impl.HttpClient;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -12,22 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSONObject;
+
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 
 /**
  * @Author sj
- * @Date 2020/2/4 下午5:43
+ * @create 2020/2/5 10:21
  */
 @RestController
-@RequestMapping("/rmgr")
-public class AuthForwardController {
-    @Value("${defaultUrl}")
+@RequestMapping("/test/rmgr")
+public class testAuthForwardController {
+    @Value("${defaultTestUr}")
     private String defaultUrl;
 
     @Resource
