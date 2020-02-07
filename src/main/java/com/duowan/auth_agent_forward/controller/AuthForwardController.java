@@ -1,6 +1,6 @@
 package com.duowan.auth_agent_forward.controller;
 
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
+import com.alibaba.fastjson.JSONObject;
 import com.duowan.auth_agent_forward.logic.HandlerUtil;
 import com.duowan.auth_agent_forward.service.impl.HttpClient;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSONObject;
+
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -75,12 +74,7 @@ public class AuthForwardController {
 
         //post请求
         HttpMethod method = HttpMethod.POST;
-        // 封装参数，千万不要替换为Map与HashMap，否则参数无法传递
-        //MultiValueMap<String, String> params= new LinkedMultiValueMap<String, String>();
-        //params.add("appid", appid);
-        //params.add("appName", appName);
-        //params.add("token", token);
-        //StringEntity s = new StringEntity(jsonParam.toString(), "UTF-8");
+
         //发送http请求并返回结果
         return httpClient.client(requestUrl,method,jsonObject);
     }

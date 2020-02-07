@@ -3,7 +3,6 @@ package com.duowan.auth_agent_forward.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 /**
