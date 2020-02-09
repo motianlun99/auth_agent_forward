@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class AuthForwardController {
     @PostMapping("/media_auth")
     public Object authForward(@RequestBody JSONObject jsonObject) {
         String requestUrl="";
-        logger.info("jsonObject %s", jsonObject.toString().toString());
+        logger.info("request params:"+jsonObject.toString());
 
         String tokenStr = jsonObject.get("token").toString();
         Base64 coder= new Base64(300, new byte[]{}, true);
@@ -67,10 +68,14 @@ public class AuthForwardController {
                     requestUrl = new String(url);
                 }
             }
-        } catch( UnsupportedEncodingException e ) {
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e)
+        {
             requestUrl = defaultUrl;
+            logger.info("default token forward url:"+requestUrl);
         }
-        logger.info("token forward url %s", requestUrl);
+        logger.info("token forward url:"+requestUrl);
 
         //post请求
         HttpMethod method = HttpMethod.POST;

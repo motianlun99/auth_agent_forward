@@ -34,12 +34,12 @@ public class TestAuthForwardController {
     @Resource
     private HandlerUtil handlerUtil;
 
-    private static Logger logger = LoggerFactory.getLogger( AuthForwardController.class );
+    private static Logger logger = LoggerFactory.getLogger( TestAuthForwardController.class );
 
     @PostMapping("/media_auth")
     public Object authForward(@RequestBody JSONObject jsonObject) {
         String requestUrl="";
-        logger.info("jsonObject %s", jsonObject.toString().toString());
+        logger.info("request params:"+jsonObject.toString());
 
         String tokenStr = jsonObject.get("token").toString();
         Base64 coder= new Base64(300, new byte[]{}, true);
@@ -66,10 +66,14 @@ public class TestAuthForwardController {
                     requestUrl = new String(url);
                 }
             }
-        } catch( UnsupportedEncodingException e ) {
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e)
+        {
             requestUrl = defaultUrl;
+            logger.info("default token forward url:"+requestUrl);
         }
-        logger.info("token forward url %s", requestUrl);
+        logger.info("token forward url:"+requestUrl);
 
         //post请求
         HttpMethod method = HttpMethod.POST;

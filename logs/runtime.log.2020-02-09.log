@@ -1,0 +1,18 @@
+2020-02-09 20:34:35.039 [main] INFO  c.d.auth_agent_forward.AuthAgentForwardApplication - Starting AuthAgentForwardApplication on lenovo with PID 18712 (E:\YYCode\java_code\auth_agent_forward\target\classes started by sj in E:\YYCode\java_code\auth_agent_forward)
+2020-02-09 20:34:35.051 [main] INFO  c.d.auth_agent_forward.AuthAgentForwardApplication - The following profiles are active: dev
+2020-02-09 20:34:41.775 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2020-02-09 20:34:41.794 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2020-02-09 20:34:41.798 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2020-02-09 20:34:41.798 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.30]
+2020-02-09 20:34:42.066 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2020-02-09 20:34:42.066 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 6815 ms
+2020-02-09 20:34:42.573 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-02-09 20:34:43.043 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2020-02-09 20:34:43.128 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2020-02-09 20:34:43.135 [main] INFO  c.d.auth_agent_forward.AuthAgentForwardApplication - Started AuthAgentForwardApplication in 9.989 seconds (JVM running for 12.627)
+2020-02-09 20:35:41.669 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-02-09 20:35:41.670 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2020-02-09 20:35:41.693 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 23 ms
+2020-02-09 20:35:42.752 [http-nio-8080-exec-2] INFO  c.d.a.controller.AuthForwardController - request params:{"appName":"测试10035","appid":"10035","id":8,"url":"http://localhost/license/add","token":"AAAAAgAAAFAAAAB7AAUxMDAwMAABAAN1cmwAEmh0dHBzOi8vd3d3Lnl5LmNvbQAAAAABcB3PJoAAAAPoRX8fG862RSj6-LZD6DqxXHsV8cw="}
+2020-02-09 20:36:05.619 [http-nio-8080-exec-2] INFO  c.d.a.controller.AuthForwardController - token forward url:https://www.yy.com
+2020-02-09 20:36:46.260 [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
