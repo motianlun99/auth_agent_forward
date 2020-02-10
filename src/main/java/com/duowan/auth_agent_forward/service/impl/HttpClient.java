@@ -2,6 +2,7 @@ package com.duowan.auth_agent_forward.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,7 +16,10 @@ public class HttpClient {
         //JSONObject
 
     public String client(String url, HttpMethod method, JSONObject jsonObj) {
-        RestTemplate client = new RestTemplate();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(5*1000);
+        requestFactory.setReadTimeout(5*1000);
+        RestTemplate client = new RestTemplate(requestFactory);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(jsonObj.toString(), headers);
