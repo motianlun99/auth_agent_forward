@@ -23,7 +23,7 @@ import java.util.Map;
  * @create 2020/2/5 10:21
  */
 @RestController
-@RequestMapping("/test/rmgr")
+@RequestMapping("/test")
 public class TestAuthForwardController {
     @Value("${defaultTestUrl}")
     private String defaultUrl;
@@ -36,7 +36,7 @@ public class TestAuthForwardController {
 
     private static Logger logger = LoggerFactory.getLogger( TestAuthForwardController.class );
 
-    @PostMapping("/media_auth")
+    @PostMapping("/rmgr/media_auth")
     public Object authForward(@RequestBody JSONObject jsonObject) {
         String requestUrl="";
         logger.info("request params:"+jsonObject.toString());
