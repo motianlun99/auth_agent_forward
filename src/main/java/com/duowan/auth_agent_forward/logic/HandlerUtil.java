@@ -1,5 +1,6 @@
 package com.duowan.auth_agent_forward.logic;
 
+import com.alibaba.fastjson.JSONObject;
 import com.duowan.auth_agent_forward.exception.YCTokenInvalidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
 
 /**
  * @Author sj
@@ -74,8 +74,83 @@ public class HandlerUtil {
     }
 
 
-    public static boolean isBase64(String str) {
-        String base64Pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-        return Pattern.matches(base64Pattern, str);
+    public static JSONObject getV1JsonObject(JSONObject jsonObject) {
+        JSONObject v1Json = new JSONObject();
+        //解析v3 json
+        //业务不存在跨频道发布，那就用 uAppId。否则streamAppId。这个还是得看对接的业务。
+        int uAppId = (int)jsonObject.get("uAppId");//项目Id
+        int streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
+
+        //暂定先用字符串。要看业务接入使用那个而定。
+        //int uid = (int)jsonObject.get("uid"); //用户Id
+        String strUid = jsonObject.get("strUid").toString();//字符串用户Id
+
+        //String channelName = jsonObject.get("channelName").toString();
+        int sid = (int)jsonObject.get("sid");
+        String name = jsonObject.get("name").toString();
+        int type = (int)jsonObject.get("type");
+        //String ipv4 = jsonObject.get("ipv4").toString();
+        int auth = (int)jsonObject.get("auth");
+        Long sendTime = (Long)jsonObject.get("sendTime");
+        String token = jsonObject.get("token").toString();
+        String session = jsonObject.get("session").toString();
+
+        JSONObject strParams = jsonObject.getJSONObject("strParams");
+        JSONObject u32Params = jsonObject.getJSONObject("u32Params");
+        JSONObject u64Params = jsonObject.getJSONObject("u64Params");
+
+        //构造V1 json
+        v1Json.put("session",session);
+        v1Json.put("appId",uAppId);
+        v1Json.put("uid",strUid);
+        v1Json.put("sid",sid);
+        v1Json.put("name",name);
+        v1Json.put("type",type);
+        v1Json.put("auth",auth);
+        v1Json.put("sendTime",sendTime);
+        v1Json.put("token",token);
+
+        v1Json.put("strParams",strParams);
+        v1Json.put("u32Params",u32Params);
+        v1Json.put("u64Params",u64Params);
+        return v1Json;
+    }
+
+    public static JSONObject getV2JsonObject(JSONObject jsonObject) {
+        JSONObject v2Json = new JSONObject();
+        //解析v3 json
+        //业务不存在跨频道发布，那就用 uAppId。否则streamAppId。这个还是得看对接的业务。
+        int uAppId = (int)jsonObject.get("uAppId");//项目Id
+        //int streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
+
+        //暂定先用字符串。要看业务接入使用那个而定。
+        //int uid = (int)jsonObject.get("uid"); //用户Id
+        String strUid = jsonObject.get("strUid").toString();//字符串用户Id
+
+        String channelName = jsonObject.get("channelName").toString();
+        //int sid = (int)jsonObject.get("sid");
+        //String name = jsonObject.get("name").toString();
+        //int type = (int)jsonObject.get("type");
+        String ipv4 = jsonObject.get("ipv4").toString();
+        int auth = (int)jsonObject.get("auth");
+        Long sendTime = (Long)jsonObject.get("sendTime");
+        String token = jsonObject.get("token").toString();
+        String session = jsonObject.get("session").toString();
+
+        JSONObject strParams = jsonObject.getJSONObject("strParams");
+        JSONObject u32Params = jsonObject.getJSONObject("u32Params");
+        JSONObject u64Params = jsonObject.getJSONObject("u64Params");
+
+        //构造V2 json
+        v2Json.put("appId",uAppId);
+        v2Json.put("roomId",channelName);
+        v2Json.put("uid",strUid);
+        v2Json.put("ip",ipv4);
+        v2Json.put("auth",auth);
+        v2Json.put("sendTime",sendTime);
+        v2Json.put("session",session);
+        v2Json.put("token",token);
+
+        return v2Json;
     }
 }

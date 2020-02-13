@@ -41,15 +41,18 @@ public class TestAuthForwardController {
         String requestUrl="";
         logger.info("request params:"+jsonObject.toString());
 
-        String tokenStr = jsonObject.get("token").toString();
-        Base64 coder= new Base64(300, new byte[]{}, true);
-        byte[] token = null;
+        JSONObject jsonObjectDummy = null;
+        int version = 0;
+
         try {
-            token = coder.decode( tokenStr.getBytes( "UTF-8" ) );
-            int version = handlerUtil.getTokenVersion(token);
+            String tokenStr = jsonObject.get("token").toString();
+            Base64 coder= new Base64(300, new byte[]{}, true);
+            byte[] token = coder.decode( tokenStr.getBytes( "UTF-8" ) );
+            version = handlerUtil.getTokenVersion(token);
             if(version == 1)
             {
                 requestUrl = defaultUrl;
+                jsonObjectDummy = HandlerUtil.getV1JsonObject(jsonObject);
             }
             else if(version == 2)
             {
@@ -65,20 +68,24 @@ public class TestAuthForwardController {
                 else{
                     requestUrl = new String(url);
                 }
+
+                jsonObjectDummy = HandlerUtil.getV2JsonObject(jsonObject);
             }
+            logger.info("forward url:"+requestUrl+",body json:"+jsonObjectDummy.toString());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e)
         {
+            //v1 token
             requestUrl = defaultUrl;
-            logger.info("default token forward url:"+requestUrl);
+            jsonObjectDummy = jsonObject;
+            jsonObjectDummy = HandlerUtil.getV1JsonObject(jsonObject);
+            logger.info("default forward url:"+requestUrl+",body json:"+jsonObjectDummy.toString());
         }
-        logger.info("token forward url:"+requestUrl);
-
         //post请求
         HttpMethod method = HttpMethod.POST;
 
         //发送http请求并返回结果
-        return httpClient.client(requestUrl,method,jsonObject);
+        return httpClient.client(requestUrl,method,jsonObjectDummy);
     }
 }
