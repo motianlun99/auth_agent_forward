@@ -76,28 +76,19 @@ public class HandlerUtil {
 
     public static JSONObject getV1JsonObject(JSONObject jsonObject) {
         JSONObject v1Json = new JSONObject();
-        //解析v3 json
-        //业务不存在跨频道发布，那就用 uAppId。否则streamAppId。这个还是得看对接的业务。
-        int uAppId = (int)jsonObject.get("uAppId");//项目Id
-        int streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
-
-        //暂定先用字符串。要看业务接入使用那个而定。
-        //int uid = (int)jsonObject.get("uid"); //用户Id
-        String strUid = jsonObject.get("strUid").toString();//字符串用户Id
-
-        //String channelName = jsonObject.get("channelName").toString();
-        int sid = (int)jsonObject.get("sid");
-        String name = jsonObject.get("name").toString();
-        int type = (int)jsonObject.get("type");
-        //String ipv4 = jsonObject.get("ipv4").toString();
-        int auth = (int)jsonObject.get("auth");
-        Long sendTime = (Long)jsonObject.get("sendTime");
-        String token = jsonObject.get("token").toString();
-        String session = jsonObject.get("session").toString();
-
-        JSONObject strParams = jsonObject.getJSONObject("strParams");
-        JSONObject u32Params = jsonObject.getJSONObject("u32Params");
-        JSONObject u64Params = jsonObject.getJSONObject("u64Params");
+        ParseV3JsonObject parseV3JsonObject = new ParseV3JsonObject(jsonObject).invoke();
+        int uAppId = parseV3JsonObject.getuAppId();
+        String strUid = parseV3JsonObject.getStrUid();
+        int sid = parseV3JsonObject.getSid();
+        String name = parseV3JsonObject.getName();
+        int type = parseV3JsonObject.getType();
+        int auth = parseV3JsonObject.getAuth();
+        Long sendTime = parseV3JsonObject.getSendTime();
+        String token = parseV3JsonObject.getToken();
+        String session = parseV3JsonObject.getSession();
+        JSONObject strParams = parseV3JsonObject.getStrParams();
+        JSONObject u32Params = parseV3JsonObject.getU32Params();
+        JSONObject u64Params = parseV3JsonObject.getU64Params();
 
         //构造V1 json
         v1Json.put("session",session);
@@ -118,29 +109,15 @@ public class HandlerUtil {
 
     public static JSONObject getV2JsonObject(JSONObject jsonObject) {
         JSONObject v2Json = new JSONObject();
-        //解析v3 json
-        //业务不存在跨频道发布，那就用 uAppId。否则streamAppId。这个还是得看对接的业务。
-        int uAppId = (int)jsonObject.get("uAppId");//项目Id
-        //int streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
-
-        //暂定先用字符串。要看业务接入使用那个而定。
-        //int uid = (int)jsonObject.get("uid"); //用户Id
-        String strUid = jsonObject.get("strUid").toString();//字符串用户Id
-
-        String channelName = jsonObject.get("channelName").toString();
-        //int sid = (int)jsonObject.get("sid");
-        //String name = jsonObject.get("name").toString();
-        //int type = (int)jsonObject.get("type");
-        String ipv4 = jsonObject.get("ipv4").toString();
-        int auth = (int)jsonObject.get("auth");
-        Long sendTime = (Long)jsonObject.get("sendTime");
-        String token = jsonObject.get("token").toString();
-        String session = jsonObject.get("session").toString();
-
-        JSONObject strParams = jsonObject.getJSONObject("strParams");
-        JSONObject u32Params = jsonObject.getJSONObject("u32Params");
-        JSONObject u64Params = jsonObject.getJSONObject("u64Params");
-
+        ParseV3JsonObject parseV3Json = new ParseV3JsonObject(jsonObject).invoke();
+        int uAppId = parseV3Json.getuAppId();
+        String strUid = parseV3Json.getStrUid();
+        String channelName = parseV3Json.getChannelName();
+        String ipv4 = parseV3Json.getIpv4();
+        int auth = parseV3Json.getAuth();
+        Long sendTime = parseV3Json.getSendTime();
+        String token = parseV3Json.getToken();
+        String session = parseV3Json.getSession();
         //构造V2 json
         v2Json.put("appId",uAppId);
         v2Json.put("roomId",channelName);
@@ -152,5 +129,145 @@ public class HandlerUtil {
         v2Json.put("token",token);
 
         return v2Json;
+    }
+
+    public static class ParseV3JsonObject {
+        private JSONObject jsonObject;
+        private int uAppId;
+        private String strUid;
+        private int sid;
+        private String name;
+        private int type;
+        private int auth;
+        private Long sendTime;
+        private String token;
+        private String session;
+        private String channelName;
+        private String ipv4;
+        private JSONObject strParams;
+        private JSONObject u32Params;
+        private JSONObject u64Params;
+
+        public ParseV3JsonObject(JSONObject jsonObject) {
+            this.jsonObject = jsonObject;
+        }
+
+        public int getuAppId() {
+            return uAppId;
+        }
+
+        public String getStrUid() {
+            return strUid;
+        }
+
+        public int getSid() {
+            return sid;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public int getAuth() {
+            return auth;
+        }
+
+        public Long getSendTime() {
+            return sendTime;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public String getSession() {
+            return session;
+        }
+
+        public String getChannelName() {
+            return channelName;
+        }
+        public String getIpv4() {
+            return ipv4;
+        }
+        public JSONObject getStrParams() {
+            return strParams;
+        }
+
+        public JSONObject getU32Params() {
+            return u32Params;
+        }
+
+        public JSONObject getU64Params() {
+            return u64Params;
+        }
+
+        public ParseV3JsonObject invoke() {
+            //解析v3 json
+            //业务不存在跨频道发布，那就用 uAppId。否则streamAppId。这个还是得看对接的业务。
+            uAppId = 0;
+            if(jsonObject.get("uAppId") != null) {
+                uAppId = (int) jsonObject.get("uAppId");//项目Id
+            }
+            int streamAppId;
+            if(jsonObject.get("streamAppId") != null){
+                streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
+            }
+            //暂定先用字符串。要看业务接入使用那个而定。
+            int uid;
+            if(jsonObject.get("uid") != null){
+                uid = (int)jsonObject.get("uid"); //用户Id
+            }
+            strUid = null;
+            if(jsonObject.get("strUid") != null){
+                strUid = jsonObject.get("strUid").toString();//字符串用户Id
+            }
+
+            channelName = null;
+            if(jsonObject.get("channelName") != null){
+                channelName = jsonObject.get("channelName").toString();
+            }
+            sid = 0;
+            if(jsonObject.get("sid") != null){
+                sid = (int)jsonObject.get("sid");
+            }
+            name = null;
+            if(jsonObject.get("name") != null){
+                name = jsonObject.get("name").toString();
+            }
+            type = 0;
+            if(jsonObject.get("type") !=null){
+                type= (int)jsonObject.get("type");
+            }
+            ipv4 = "";
+            if(jsonObject.get("ipv4")!=null){
+                ipv4 = jsonObject.get("ipv4").toString();
+            }
+            auth = 0;
+            if(jsonObject.get("auth")!=null){
+                auth = (int)jsonObject.get("auth");
+            }
+            sendTime = null;
+            if(jsonObject.get("sendTime")!=null){
+                sendTime = (Long)jsonObject.get("sendTime");
+            }
+            token = null;
+            if(jsonObject.get("token")!=null){
+                token = jsonObject.get("token").toString();
+            }
+            session = "";
+            if(jsonObject.get("session")!=null){
+                session = jsonObject.get("session").toString();
+            }
+
+            strParams = jsonObject.getJSONObject("strParams");
+            u32Params = jsonObject.getJSONObject("u32Params");
+            u64Params = jsonObject.getJSONObject("u64Params");
+            return this;
+        }
     }
 }
