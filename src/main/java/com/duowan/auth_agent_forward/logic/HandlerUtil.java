@@ -134,6 +134,8 @@ public class HandlerUtil {
     public static class ParseV3JsonObject {
         private JSONObject jsonObject;
         private int uAppId;
+        private int streamAppId;
+        private String uid;
         private String strUid;
         private int sid;
         private String name;
@@ -156,6 +158,13 @@ public class HandlerUtil {
             return uAppId;
         }
 
+        public int getstreamAppId() {
+            return streamAppId;
+        }
+
+        public String getuid() {
+            return uid;
+        }
         public String getStrUid() {
             return strUid;
         }
@@ -213,14 +222,14 @@ public class HandlerUtil {
             if(jsonObject.get("uAppId") != null) {
                 uAppId = (int) jsonObject.get("uAppId");//项目Id
             }
-            int streamAppId;
+            streamAppId = 0;
             if(jsonObject.get("streamAppId") != null){
                 streamAppId = (int)jsonObject.get("streamAppId");//发布所在的appid
             }
             //暂定先用字符串。要看业务接入使用那个而定。
-            int uid;
+            uid = null;
             if(jsonObject.get("uid") != null){
-                uid = (int)jsonObject.get("uid"); //用户Id
+                uid = jsonObject.get("uid").toString(); //用户Id
             }
             strUid = null;
             if(jsonObject.get("strUid") != null){
@@ -243,7 +252,7 @@ public class HandlerUtil {
             if(jsonObject.get("type") !=null){
                 type= (int)jsonObject.get("type");
             }
-            ipv4 = "";
+            ipv4 = null;
             if(jsonObject.get("ipv4")!=null){
                 ipv4 = jsonObject.get("ipv4").toString();
             }
@@ -259,7 +268,7 @@ public class HandlerUtil {
             if(jsonObject.get("token")!=null){
                 token = jsonObject.get("token").toString();
             }
-            session = "";
+            session = null;
             if(jsonObject.get("session")!=null){
                 session = jsonObject.get("session").toString();
             }
